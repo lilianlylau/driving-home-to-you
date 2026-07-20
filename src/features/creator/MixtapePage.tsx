@@ -9,7 +9,7 @@ export function MixtapePage() {
       <CreatorHeader step={1} />
       <section className="creator-content">
         <h1>step one. queue up the mixtape</h1>
-        <p>pick up to three songs that reminds you of them</p>
+        <p className="heading-3">pick up to three songs that reminds you of them</p>
         <label className="sr-only" htmlFor="song-search">
           Search for a song or artist
         </label>

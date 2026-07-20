@@ -11,6 +11,9 @@
   --screen: #2d3935;
   --screen-text: #9caf9d;
   --paper: #fff;
+  --heading-1-size: 20px;
+  --heading-2-size: 20px;
+  --heading-3-size: 16px;
   font-family: 'VT323', monospace;
   color: var(--ink);
   background: var(--paper);
@@ -53,9 +56,35 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.heading-3 {
   letter-spacing: 0.015em;
+}
+h1,
+h2,
+h4,
+h5,
+h6 {
   -webkit-text-stroke: 0.2px currentColor;
+}
+h1 {
+  font-size: var(--heading-1-size);
+}
+h2 {
+  font-size: var(--heading-2-size);
+}
+h3,
+.heading-3 {
+  font-size: var(--heading-3-size);
+}
+h4 {
+  font-size: var(--heading-4-size);
+}
+h5 {
+  font-size: var(--heading-5-size);
+}
+h6 {
+  font-size: var(--heading-6-size);
 }
 p {
   line-height: 1.1;
@@ -123,17 +152,15 @@ a {
 }
 .hero h1 {
   margin: 24px 0 12px;
-  font-size: 22px;
 }
 .hero p {
   margin-bottom: 16px;
 }
 .preview {
-  margin-top: 46px;
+  margin-top: 64px;
 }
 .preview > header h2 {
   margin-bottom: 5px;
-  font-size: 22px;
 }
 .preview > header p {
   margin-bottom: 24px;
@@ -156,7 +183,6 @@ a {
   margin-inline: auto;
 }
 .creator-content h1 {
-  font-size: 21px;
   margin-bottom: 8px;
 }
 .creator-content > p {
@@ -275,15 +301,18 @@ a {
   margin: 0;
   padding: 0 4px 0 20px;
   color: #111;
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  line-height: 1.18;
+  font-family: 'VT323', monospace;
+  font-size: 10px;
+  line-height: 10px;
   text-align: left;
 }
 .cassette-tracks li {
+  height: 10px;
   padding-left: 1px;
-  border-bottom: 1px solid #222;
   white-space: nowrap;
+}
+.landing .cassette-tracks li:first-child {
+  transform: translateY(4px);
 }
 .cassette-tracks button {
   float: right;
@@ -377,7 +406,6 @@ a {
   margin-bottom: 20px;
 }
 .receiver__intro h1 {
-  font-size: 22px;
   margin-bottom: 5px;
 }
 .road-scene {
@@ -403,7 +431,6 @@ a {
 }
 .receiver__section h2 {
   margin-bottom: 5px;
-  font-size: 22px;
 }
 .receiver__section > p {
   margin-bottom: 17px;
@@ -427,8 +454,7 @@ a {
 .receiver__closing {
   margin: 50px 0 78px;
 }
-.receiver__closing h2 {
-  font-size: 22px;
+.receiver__closing h3 {
   line-height: 0.95;
   margin-bottom: 18px;
 }
@@ -444,9 +470,6 @@ a {
 .share-panel {
   width: min(520px, calc(100% - 36px));
   margin: 0 auto 48px;
-}
-.share-panel h1 {
-  font-size: 22px;
 }
 .share-panel label {
   display: block;
@@ -479,7 +502,6 @@ a {
 .not-found h1 {
   margin: 36px auto 12px;
   max-width: 480px;
-  font-size: 24px;
 }
 .not-found .abuse-link {
   display: block;
@@ -490,6 +512,18 @@ a {
   body {
     font-size: 17px;
   }
+  .page > *,
+  .creator-header,
+  .creator-content,
+  .receiver > *,
+  .receiver__section > .player,
+  .receiver__section > .cassette-wrap,
+  .receiver__section > .letter,
+  .voice-recorder,
+  .voice-recorder__art,
+  .share-panel {
+    margin-inline: auto;
+  }
   .hero {
     padding-top: 52px;
   }
@@ -497,7 +531,7 @@ a {
     margin-top: 24px;
   }
   .preview {
-    margin-top: 43px;
+    margin-top: 64px;
   }
   .preview > header p {
     margin-bottom: 23px;
@@ -548,7 +582,7 @@ a {
     padding-top: 55px;
   }
   .preview {
-    margin-top: 45px;
+    margin-top: 64px;
   }
   .creator-page {
     padding-top: 54px;

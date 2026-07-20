@@ -14,6 +14,9 @@ describe('route shells', () => {
       'href',
       '/create/mixtape',
     )
+    expect(screen.getByText('Dreams - The Cranberries')).toBeInTheDocument()
+    expect(screen.queryByText('Song - Artist')).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'send a message back' })).not.toBeInTheDocument()
   })
   it('renders semantic mixtape controls', () => {
     render(

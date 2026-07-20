@@ -10,7 +10,7 @@ export function LetterPage() {
       <CreatorHeader step={2} />
       <section className="creator-content">
         <h1>step two. write them a letter</h1>
-        <p>
+        <p className="heading-3">
           leave a note for the dashboard. it can be
           <br /> long, short, or just a quick hello.
         </p>

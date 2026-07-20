@@ -6,16 +6,22 @@ import { Player } from './Player'
 export function ReceiverExperience({
   standalone = false,
   showIntro = false,
+  cassetteTrackCount = 3,
+  showClosingAction = true,
 }: {
   standalone?: boolean
   showIntro?: boolean
+  cassetteTrackCount?: 1 | 2 | 3
+  showClosingAction?: boolean
 }) {
   return (
     <div className="receiver">
       {showIntro && (
         <header className="receiver__intro">
           <h1>someone wishes they were driving home to you.</h1>
-          <p>pull up a seat. they left a few things on the dashboard for you.</p>
+          <p className="heading-3">
+            pull up a seat. they left a few things on the dashboard for you.
+          </p>
         </header>
       )}
       <div className="road-scene">
@@ -36,31 +42,32 @@ export function ReceiverExperience({
       </div>
       <section className="receiver__section">
         <h2>pop the mixtape in.</h2>
-        <p>songs they picked for the road.</p>
+        <p className="heading-3">songs they picked for the road.</p>
         <Player />
-        <Cassette />
+        <Cassette trackCount={cassetteTrackCount} />
       </section>
       <section className="receiver__section">
         <h2>a letter left on the passenger seat.</h2>
-        <p>from them, to you.</p>
+        <p className="heading-3">from them, to you.</p>
         <Letter />
       </section>
       <section className="receiver__section">
         <h2>a voice note from the drive.</h2>
-        <p>press the tape recorder to hear their voice.</p>
+        <p className="heading-3">press the tape recorder to hear their voice.</p>
         <button className="voice-toggle" type="button" aria-label="Play voice note">
           <img src="/assets/voice-memo/tape-recorder-on.png" alt="" />
         </button>
       </section>
       <footer className="receiver__closing">
-        <h2>
-          leave this screen open, turn up
-          <br /> the volume, and enjoy the drive
-          <br /> together.
-        </h2>
-        <ButtonLink to={standalone ? '/' : '/create/mixtape'}>
-          {standalone ? 'start your drive home' : 'send a message back'}
-        </ButtonLink>
+        <h3>
+          leave this screen open, turn up the volume,
+          <br /> and enjoy the drive together.
+        </h3>
+        {showClosingAction && (
+          <ButtonLink to={standalone ? '/' : '/create/mixtape'}>
+            {standalone ? 'start your drive home' : 'send a message back'}
+          </ButtonLink>
+        )}
       </footer>
     </div>
   )

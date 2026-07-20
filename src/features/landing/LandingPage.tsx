@@ -8,7 +8,7 @@ export function LandingPage() {
       <section className="hero">
         <Logo />
         <h1>drive home to someone you miss</h1>
-        <p>
+        <p className="heading-3">
           pack a mixtape, a letter, and a voice note.
           <br />
           start your drive home to someone far away.
@@ -18,12 +18,12 @@ export function LandingPage() {
       <section className="preview">
         <header>
           <h2>preview the passenger seat</h2>
-          <p>
-            leave this screen open, turn up the volume, and
-            <br /> enjoy the drive together.
+          <p className="heading-3">
+            the passenger can leave this screen open,
+            <br /> turn up the volume, and enjoy the drive together.
           </p>
         </header>
-        <ReceiverExperience />
+        <ReceiverExperience cassetteTrackCount={1} showClosingAction={false} />
       </section>
     </main>
   )

@@ -7,7 +7,7 @@ export function MemoPage() {
       <CreatorHeader step={3} />
       <section className="creator-content">
         <h1>step three. record a voice memo</h1>
-        <p>sometimes messages are better aloud. optional.</p>
+        <p className="heading-3">sometimes messages are better aloud. optional.</p>
         <VoiceRecorder />
       </section>
     </main>
