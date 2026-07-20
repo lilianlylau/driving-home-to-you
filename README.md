@@ -2,7 +2,7 @@
 
 Driving Home to You is a lo-fi web experience for sending something personal to someone far away. A creator builds a digital passenger-seat package with up to three songs, a letter, and an optional voice memo, then shares a unique link. The recipient opens that link to enjoy the package against a sunny, retro road-trip backdrop.
 
-This repository currently contains the approved visual references and production assets for the project. There is no application source or project configuration yet. Treat `design/screenshots` and `public/assets` as the source of truth when implementing the app; the details below document those files rather than an existing implementation.
+The repository contains the React/Vite foundation, the static visual system, approved visual references, and production assets. The creator interactions and backend persistence described below are staged for later implementation phases.
 
 ## Experience overview
 
@@ -26,32 +26,32 @@ The shared page presents:
 
 The intended routes are:
 
-| Route | Purpose |
-| --- | --- |
-| `/` | Landing page and example recipient preview |
-| `/create/mixtape` | Step one: choose up to three songs |
-| `/create/letter` | Step two: write a letter |
-| `/create/memo` | Step three: record or skip a voice memo |
-| `/create/share` | Generated link and completed-package preview |
+| Route             | Purpose                                      |
+| ----------------- | -------------------------------------------- |
+| `/`               | Landing page and example recipient preview   |
+| `/create/mixtape` | Step one: choose up to three songs           |
+| `/create/letter`  | Step two: write a letter                     |
+| `/create/memo`    | Step three: record or skip a voice memo      |
+| `/create/share`   | Generated link and completed-package preview |
 | `/drive/:shortId` | Recipient's shared passenger-seat experience |
 
 ## Design references
 
 The screenshots are implementation references for layout, spacing, typography, copy, component states, and responsive behavior.
 
-| File | Viewport | Reference |
-| --- | ---: | --- |
-| `design/screenshots/desktop-00-landing-page.png` | 1440 × 2118 | Desktop landing page and example experience |
-| `design/screenshots/desktop-04-share-url.png` | 1440 × 2118 | Desktop share page and creator preview |
-| `design/screenshots/desktop-shared-url.png` | 1440 × 1921 | Desktop recipient page |
-| `design/screenshots/mobile-00-landing-page.png` | 402 × 2118 | Mobile landing page and example experience |
-| `design/screenshots/mobile-01-music.png` | 402 × 874 | Mobile mixtape step |
-| `design/screenshots/mobile-02-letter.png` | 402 × 874 | Mobile letter step |
-| `design/screenshots/mobile-03a-no-recording-state.png` | 402 × 874 | Voice memo: empty state |
-| `design/screenshots/mobile-03b-recording-state.png` | 402 × 874 | Voice memo: recording state |
-| `design/screenshots/mobile-03c-has-recording-state.png` | 402 × 874 | Voice memo: recorded state |
-| `design/screenshots/mobile-04-share-url.png` | 402 × 2098 | Mobile share page and creator preview |
-| `design/screenshots/mobile-shared-url.png` | 402 × 1921 | Mobile recipient page |
+| File                                                    |    Viewport | Reference                                   |
+| ------------------------------------------------------- | ----------: | ------------------------------------------- |
+| `design/screenshots/desktop-00-landing-page.png`        | 1440 × 2118 | Desktop landing page and example experience |
+| `design/screenshots/desktop-04-share-url.png`           | 1440 × 2118 | Desktop share page and creator preview      |
+| `design/screenshots/desktop-shared-url.png`             | 1440 × 1921 | Desktop recipient page                      |
+| `design/screenshots/mobile-00-landing-page.png`         |  402 × 2118 | Mobile landing page and example experience  |
+| `design/screenshots/mobile-01-music.png`                |   402 × 874 | Mobile mixtape step                         |
+| `design/screenshots/mobile-02-letter.png`               |   402 × 874 | Mobile letter step                          |
+| `design/screenshots/mobile-03a-no-recording-state.png`  |   402 × 874 | Voice memo: empty state                     |
+| `design/screenshots/mobile-03b-recording-state.png`     |   402 × 874 | Voice memo: recording state                 |
+| `design/screenshots/mobile-03c-has-recording-state.png` |   402 × 874 | Voice memo: recorded state                  |
+| `design/screenshots/mobile-04-share-url.png`            |  402 × 2098 | Mobile share page and creator preview       |
+| `design/screenshots/mobile-shared-url.png`              |  402 × 1921 | Mobile recipient page                       |
 
 Desktop and mobile use the same screen layout. On mobile, only the receiver-header media is cropped: show the center of `sunny-drive-loop.mp4` and `tape-recorder-on-dashboard.png` rather than shrinking either asset to fit the viewport.
 
@@ -186,26 +186,26 @@ Return an HTTP 404 where the hosting platform supports route-level status codes.
 
 ## Proposed implementation contract
 
-The original project direction calls for React, TypeScript, and Vite, with React Router, Zustand, Supabase, and deployment to Vercel. These dependencies have not yet been installed in this repository.
+The app uses React, TypeScript, and Vite, with React Router, Zustand, Supabase, and deployment to Vercel.
 
 Expected data shape:
 
 ```ts
 interface Song {
-  id: string;
-  title: string;
-  artist: string;
-  audioUrl: string;
-  albumArtUrl?: string;
+  id: string
+  title: string
+  artist: string
+  audioUrl: string
+  albumArtUrl?: string
 }
 
 interface DriveData {
-  id?: string;
-  shortId?: string;
-  songs: Song[]; // maximum 3
-  noteText: string;
-  voiceMemoUrl?: string;
-  createdAt?: string;
+  id?: string
+  shortId?: string
+  songs: Song[] // maximum 3
+  noteText: string
+  voiceMemoUrl?: string
+  createdAt?: string
 }
 ```
 
@@ -274,12 +274,12 @@ short-term retention.
 The deployed implementation should expose equivalent operations, regardless of whether
 they are implemented as Vercel functions or Supabase Edge Functions:
 
-| Operation | Behavior |
-| --- | --- |
-| Search songs | Server-side proxy to iTunes; accept a bounded query and return normalized results only |
-| Create drive | Validate content, optionally upload audio, create the record, and return `shortId`, share URL, and deletion token |
-| Read drive | Return the public drive payload and a short-lived signed voice URL; return 404 for missing, expired, or deleted drives |
-| Delete drive | Require the deletion token, mark the drive deleted, and queue its audio for cleanup |
+| Operation    | Behavior                                                                                                               |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| Search songs | Server-side proxy to iTunes; accept a bounded query and return normalized results only                                 |
+| Create drive | Validate content, optionally upload audio, create the record, and return `shortId`, share URL, and deletion token      |
+| Read drive   | Return the public drive payload and a short-lived signed voice URL; return 404 for missing, expired, or deleted drives |
+| Delete drive | Require the deletion token, mark the drive deleted, and queue its audio for cleanup                                    |
 
 Use consistent JSON error bodies with a stable machine-readable code and safe user
 message. The UI must provide retry actions for search, creation, upload, and playback
@@ -324,6 +324,9 @@ failures and must not discard the creator draft after a failed request.
 
 ```text
 .
+├── .github/workflows/ci.yml
+├── src/                   # React routes, components, stores, styles, and types
+├── tests/e2e/             # Responsive route smoke tests
 ├── README.md
 ├── design/
 │   └── screenshots/    # Approved desktop and mobile page references
@@ -331,4 +334,19 @@ failures and must not discard the creator draft after a failed request.
     └── assets/         # Runtime font, image, and video assets
 ```
 
-When application code is added, update this section and add concrete setup, environment-variable, development, test, and deployment instructions based on the implementation that actually exists.
+## Local development
+
+Use Node 22 and npm 10 (see `.nvmrc` and `package.json`).
+
+```bash
+npm ci
+npm run dev
+```
+
+Copy `.env.example` to `.env.local` only when connecting a Supabase project. The static app and CI checks run without secrets. `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are optional browser-safe values; never place a service-role key in a `VITE_` variable.
+
+Run `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run test:e2e`, and `npm run build` before handing off a change.
+
+## Runtime and deployment decision
+
+Vercel server functions under `api/` are the selected server runtime for future song-search and drive APIs. Supabase Edge Functions will not duplicate those endpoints. The static foundation deploys with `npm run build` and the `dist` output directory; server environment variables will be documented when the APIs are introduced.
