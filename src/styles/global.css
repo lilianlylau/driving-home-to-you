@@ -202,14 +202,94 @@ a {
   color: white;
   padding: 2px 10px 4px;
   text-align: center;
-  margin-bottom: 31px;
+  margin-bottom: 0;
 }
 .search::placeholder {
   color: #b9c9bd;
   opacity: 1;
 }
+.song-search {
+  position: relative;
+  margin-bottom: 14px;
+}
+.song-search__status {
+  min-height: 17px;
+  color: #555;
+  font-size: 15px;
+}
+.song-search__status button {
+  border: 0;
+  padding: 0;
+  color: var(--red);
+  background: transparent;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.song-results {
+  position: absolute;
+  z-index: 3;
+  top: 27px;
+  width: 100%;
+  max-height: 185px;
+  margin: 0;
+  padding: 4px 8px;
+  overflow-y: auto;
+  border: 2px solid var(--charcoal);
+  background: white;
+  list-style: none;
+  text-align: left;
+}
+.song-results li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid #d4d7d5;
+}
+.song-results li:last-child {
+  border-bottom: 0;
+}
+.song-results span {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.song-results small {
+  display: block;
+  font: inherit;
+  color: #59615f;
+}
+.song-results button {
+  border: 0;
+  border-radius: 2px;
+  padding: 1px 10px;
+  color: white;
+  background: var(--red);
+  cursor: pointer;
+}
+.song-results button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
 .creator-content .player {
   margin-bottom: 9px;
+}
+.player-wrap {
+  width: 330px;
+  max-width: 100%;
+  margin-inline: auto;
+}
+.player-error {
+  margin: 4px 0 0;
+  color: var(--red);
+  font-size: 15px;
+  text-align: left;
+}
+.player__controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 .creator-content .cassette-wrap {
   margin-bottom: 39px;

@@ -4,11 +4,13 @@ import { CreatorHeader } from '../../components/CreatorHeader'
 import { Player } from '../../components/Player'
 import { useNavigate } from 'react-router-dom'
 import { isValidSongSelection, useDraftStore } from '../../stores/draft'
+import { SongSearch } from './SongSearch'
 
 export function MixtapePage() {
   const navigate = useNavigate()
   const songs = useDraftStore((state) => state.songs)
   const removeSong = useDraftStore((state) => state.removeSong)
+  const addSong = useDraftStore((state) => state.addSong)
   const setCurrentStep = useDraftStore((state) => state.setCurrentStep)
   return (
     <main className="creator-page page">
@@ -16,16 +18,8 @@ export function MixtapePage() {
       <section className="creator-content">
         <h1>step one. queue up the mixtape</h1>
         <p className="heading-3">pick up to three songs that reminds you of them</p>
-        <label className="sr-only" htmlFor="song-search">
-          Search for a song or artist
-        </label>
-        <input
-          id="song-search"
-          className="search"
-          type="search"
-          placeholder="search song or artist"
-        />
-        <Player />
+        <SongSearch selected={songs} onAdd={addSong} />
+        <Player tracks={songs} />
         <Cassette editable tracks={songs} onRemove={removeSong} />
         <div className="actions">
           <Button
