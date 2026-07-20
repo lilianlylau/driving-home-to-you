@@ -1,181 +1,202 @@
 # Driving Home to You
 
-A lofi, web application for people missing someone far away. Creators craft a personalized experience by choosing up to 3 songs, writing a letter, and optionally recording a voice memo. Receivers open a unique share link to see a looping driving video on a retro dashboard UI with playable music, a handwritten note, and a voice memo player.
+Driving Home to You is a lo-fi web experience for sending something personal to someone far away. A creator builds a digital passenger-seat package with up to three songs, a letter, and an optional voice memo, then shares a unique link. The recipient opens that link to enjoy the package against a sunny, retro road-trip backdrop.
 
-## Technical Stack
-Framework & Build: React 18 + TypeScript + Vite 6
+This repository currently contains the approved visual references and production assets for the project. There is no application source or project configuration yet. Treat `design/screenshots` and `public/assets` as the source of truth when implementing the app; the details below document those files rather than an existing implementation.
 
-Routing: React Router v6
+## Experience overview
 
-State Management: Zustand (with sessionStorage and IndexedDB persistence)
+### Creator flow
 
-Styling: Tailwind CSS / CSS Modules
+1. **Landing page** — Introduces the experience, links to the creator flow, and previews a completed passenger seat.
+2. **Mixtape** — Lets the creator search for and select up to three songs, preview them, move between tracks, and remove selections.
+3. **Letter** — Provides a paper-textured writing area for a personal message.
+4. **Voice memo** — Lets the creator record an optional message, stop recording, play it back, or record it again.
+5. **Share and preview** — Generates a shareable URL and displays the completed recipient experience as a preview.
 
-Backend / Persistence: Supabase (Database, Storage, Edge Functions)
+### Recipient flow
 
-Audio Recording: Web Audio API (MediaRecorder API)
+The shared page presents:
 
-Deployment: Vercel
+- a looping sunny-drive scene above a dashboard and tape recorder;
+- a three-track cassette and player;
+- a letter on the passenger seat;
+- a playable voice memo; and
+- a closing call to action to create a new package.
 
-## Application Routes
+The intended routes are:
 
-### Creator Flow
+| Route | Purpose |
+| --- | --- |
+| `/` | Landing page and example recipient preview |
+| `/create/mixtape` | Step one: choose up to three songs |
+| `/create/letter` | Step two: write a letter |
+| `/create/memo` | Step three: record or skip a voice memo |
+| `/create/share` | Generated link and completed-package preview |
+| `/drive/:shortId` | Recipient's shared passenger-seat experience |
 
-`/:` Landing Page
+## Design references
 
-Hero Text: "drive home to someone you miss."
-Subheader: "pack a mixtape, a letter, and a voice note. start your drive home to someone far away."
-CTA: "start here"
+The screenshots are implementation references for layout, spacing, typography, copy, component states, and responsive behavior.
 
-Second Hero Text: "preview the passenger seat"
-Second Subheader: "leave this screen open, turn up the volume, and enjoy the drive together."
+| File | Viewport | Reference |
+| --- | ---: | --- |
+| `design/screenshots/desktop-00-landing-page.png` | 1440 × 2118 | Desktop landing page and example experience |
+| `design/screenshots/desktop-04-share-url.png` | 1440 × 2118 | Desktop share page and creator preview |
+| `design/screenshots/desktop-shared-url.png` | 1440 × 1921 | Desktop recipient page |
+| `design/screenshots/mobile-00-landing-page.png` | 402 × 2118 | Mobile landing page and example experience |
+| `design/screenshots/mobile-01-music.png` | 402 × 874 | Mobile mixtape step |
+| `design/screenshots/mobile-02-letter.png` | 402 × 874 | Mobile letter step |
+| `design/screenshots/mobile-03a-no-recording-state.png` | 402 × 874 | Voice memo: empty state |
+| `design/screenshots/mobile-03b-recording-state.png` | 402 × 874 | Voice memo: recording state |
+| `design/screenshots/mobile-03c-has-recording-state.png` | 402 × 874 | Voice memo: recorded state |
+| `design/screenshots/mobile-04-share-url.png` | 402 × 2098 | Mobile share page and creator preview |
+| `design/screenshots/mobile-shared-url.png` | 402 × 1921 | Mobile recipient page |
 
-`/create/mixtape`: Step 1 — Mixtape
+Desktop and mobile use the same screen layout. On mobile, only the receiver-header media is cropped: show the center of `sunny-drive-loop.mp4` and `tape-recorder-on-dashboard.png` rather than shrinking either asset to fit the viewport.
 
-Select up to 3 songs (use itunes api https://itunes.apple.com/search).
+## Asset catalog
 
-Header: "step one. queue up the mixtape"
-Subheader: "pick up to three songs that reminds you of them"
-Buttons: "next"
-Assets: mixtape-empty.png, cassette-empty.png
+All runtime assets live under `public/assets` and can be referenced from the app with root-relative URLs such as `/assets/logo/logo.png`.
 
-User searches for artist or song in search bar. User clicks song and it appears in cassette-empty and mixtape-empty. Users can click play in mixtape-empty visual. 
-
-`/create/letter`: Step 2 — Letter
-
-Written note area with paper texture aesthetic.
-
-Header: "step two. write them a letter"
-Subheader: "leave a note for the dashboard. it can be long, short, or just a quick hello."
-Buttons: "back", "next"
-
-`/create/memo`: Step 3 — Voice Memo
-
-Optional Web Audio recorder component with tape recorder visual.
-
-State - no recording
-- Header: "step three. record a voice memo"
-- Subheader: "sometimes messages are better aloud. optional."
-- Visual: tape-recorder-off.png
-- Buttons: "record audio", "skip"
-
-State - recording
-- Header: "step three. record a voice memo"
-- Visual: tape-recording.png, tape-recorder-on.png
-- Buttons: "stop recording"
-
-State - recording stored
-- Header: "step three. record a voice memo"
-- Visual: tape-recorded.png, tape-recorder-off.png
-- Buttons: "play back", "record again", "done"
-
-`/create/share`: Step 4 — Final Review & Link Generation
-
-Generates unique short link via Supabase Edge Function (/drive/:shortId).
-
-### Receiver Flow
-`/drive/:shortId`: The Passenger Seat Experience
-
-Header section
-Header: "someone wishes they were driving home to you."
-Subheader: "pull up a seat. they left a few things on the dashboard for you."
-sets: sunny-drive-loop.mp4, tape-recorder-on-dashboard.png
-Sunny drive video loop and tape recorder on dashboard visual.
-
-First section - mixtape
-Header: "pop the mixtape in."
-Subheader: "songs they picked for the road."
-Assets: mixtape-empty.png, cassette-empty.png
-Stored songs should be rendered on top of cassette-empty. The first song appears in mixtape-empty. When user clicks next on mixtape-empty, it goes to the next song.
-
-
-Second section - letter
-Header: "a letter left on the passenger seat." 
-Subheader: "from them, to you."
-Assets: note-empty.png
-Message is rendered on top.
-
-Third section - voice memo
-Header: "a voice note from the drive."
-Subheader: "press the tape recorder to hear their voice."
-Assets: tape-recorder-on.png
-User clicks on the tape record image to hear the message. Click again to stop it.
-
-Footer Text: "leave this screen open, turn up the volume, and enjoy the drive together."
-
-CTA: Button to "start your drive home".
-
-## Project Structure
-```
-├── design/                 # Optional: Raw design files, Figma exports, or reference PNGs
-│   └── screenshots/        # Full-page screen mocks and reference layouts
-├── public/
-│   ├── assets/
-│   │   ├── fonts/           # Retro pixel fonts and handwriting script fonts
-│   │   ├── videos/          # 1920x1080 sunny day driving video loop
-│   │   ├── dashboard/       # Car interior, windshield frame, passenger seat graphics
-│   │   ├── audio/           # Cassette player UI, dictaphone graphic, tape textures
-│   │   └── textures/        # Paper texture backgrounds
-├── src/
-│   ├── components/
-│   │   ├── Creator/         # Steps 1-3 creation components
-│   │   ├── Dashboard/       # Receiver dashboard layout & stacked video frame
-│   │   ├── AudioPlayer/     # Cassette tape deck player component
-│   │   ├── VoiceRecorder/   # Web Audio dictaphone recorder component
-│   │   └── UI/              # Pixelated buttons, inputs, retro UI elements
-│   ├── lib/
-│   │   ├── supabase.ts      # Supabase client setup
-│   │   ├── audioStorage.ts  # Blob handling & storage uploads for audio files
-│   │   └── assets.ts        # Image and video asset registry
-│   ├── store/
-│   │   └── driveStore.ts    # Zustand store for draft creation and player state
-│   ├── types/
-│   │   └── drive.ts         # TypeScript interfaces (DriveData, Song, Memo, etc.)
-│   ├── App.tsx
-│   └── main.tsx
-├── supabase/
-│   ├── functions/
-│   │   └── create-drive/    # Edge function to save drive payload and return shortId
-│   └── migrations/
-│       └── 001_drives.sql   # Table schema for drive records
+```text
+public/assets/
+├── creator-header/
+│   ├── fuel-gauge-step-1.png
+│   ├── fuel-gauge-step-2.png
+│   └── fuel-gauge-step-3.png
+├── fonts/VT323/
+│   ├── OFL.txt
+│   └── VT323-Regular.ttf
+├── letter/
+│   ├── note-empty.png
+│   └── note-example.png
+├── logo/
+│   └── logo.png
+├── mixtape/
+│   ├── cassette-empty.png
+│   ├── cassette-example.png
+│   ├── mixtape-empty.png
+│   ├── mixtape-song-example.png
+│   └── mixtape-song-with-remove-example.png
+├── receiver-header/
+│   ├── sunny-drive-loop.mp4
+│   └── tape-recorder-on-dashboard.png
+└── voice-memo/
+    ├── tape-recorded.png
+    ├── tape-recorder-off.png
+    ├── tape-recorder-on.png
+    └── tape-recording.png
 ```
 
-## Data Schema & Types (src/types/drive.ts)
-TypeScript
-export interface Song {
+Files ending in `-empty` are clean composition surfaces for dynamic content. Files ending in `-example`, plus the recording-strip assets, show the intended overlays and states and should be used as visual references where content needs to remain dynamic.
+
+The included VT323 font is licensed under the SIL Open Font License; see `public/assets/fonts/VT323/OFL.txt`.
+
+## UI behavior and copy
+
+### Landing page
+
+- Headline: “drive home to someone you miss”
+- Supporting copy: “pack a mixtape, a letter, and a voice note. start your drive home to someone far away.”
+- Primary action: “start here”
+- Preview heading: “preview the passenger seat”
+- Preview copy: “leave this screen open, turn up the volume, and enjoy the drive together.”
+
+### Step one: mixtape
+
+- Heading: “step one. queue up the mixtape”
+- Supporting copy: “pick up to three songs that reminds you of them”
+- Search placeholder: “search song or artist”
+- The selected songs are written onto the cassette label.
+- The player shows the active title and artist, elapsed time, and previous/play/next controls.
+- Each selected track has a “remove” action; continue with “next.”
+
+Song search is intended to use the [iTunes Search API](https://itunes.apple.com/search). Store enough metadata to render and play each selection: an ID, title, artist, preview audio URL, and optional artwork URL.
+
+### Step two: letter
+
+- Heading: “step two. write them a letter”
+- Supporting copy: “leave a note for the dashboard. it can be long, short, or just a quick hello.”
+- Placeholder: “start writing...”
+- Actions: “back” and “next”
+
+Render editable text over `note-empty.png`; `note-example.png` demonstrates the expected result.
+
+### Step three: voice memo
+
+- Heading: “step three. record a voice memo”
+- Supporting copy: “sometimes messages are better aloud. optional.”
+- Empty state: `tape-recorder-off.png`; actions are “record audio” and “skip.”
+- Recording state: `tape-recording.png` above `tape-recorder-on.png`; show elapsed time and “stop recording.”
+- Recorded state: `tape-recorded.png` above `tape-recorder-off.png`; show duration and the actions “play back,” “record again,” and “done.”
+
+Recording requires microphone permission. The intended maximum duration is two minutes, with a browser-supported compressed format such as WebM uploaded to storage.
+
+### Share page
+
+- Heading: “share this link to invite them into your passenger seat.”
+- Display the generated URL prominently in a copyable field.
+- Render the completed recipient page below the link so the creator can review the result.
+
+### Recipient page
+
+- Heading: “someone wishes they were driving home to you.”
+- Supporting copy: “pull up a seat. they left a few things on the dashboard for you.”
+- Place `sunny-drive-loop.mp4` directly above `tape-recorder-on-dashboard.png` so they read as one continuous windshield/dashboard scene.
+- Play `sunny-drive-loop.mp4` as an endless loop.
+- Mixtape heading: “pop the mixtape in.” / “songs they picked for the road.”
+- Letter heading: “a letter left on the passenger seat.” / “from them, to you.”
+- Voice heading: “a voice note from the drive.” / “press the tape recorder to hear their voice.”
+- Clicking the tape recorder toggles voice-memo playback.
+- Closing copy: “leave this screen open, turn up the volume, and enjoy the drive together.”
+- The standalone shared page ends with “start your drive home”; embedded landing/share previews use “send a message back.”
+
+## Visual direction
+
+- Preserve the sparse white canvas, centered composition, lowercase copy, and restrained charcoal and dark-red controls.
+- Use VT323 for the pixel/monospace interface text. The script lettering in the logo is already baked into `logo.png`.
+- Keep all text, form controls, and playback controls accessible and functional rather than baking dynamic content into imagery.
+- Maintain the native aspect ratios of the supplied images and video.
+- Keep the same centered layout on desktop and mobile; center-crop the two receiver-header assets on narrow viewports.
+- Provide visible focus styles, keyboard-operable controls, useful alternative text, and reduced-motion handling for the looping video.
+
+## Proposed implementation contract
+
+The original project direction calls for React, TypeScript, and Vite, with React Router, Zustand, Supabase, and deployment to Vercel. These dependencies have not yet been installed in this repository.
+
+Expected data shape:
+
+```ts
+interface Song {
   id: string;
   title: string;
   artist: string;
-  albumArtUrl?: string;
   audioUrl: string;
+  albumArtUrl?: string;
 }
 
-export interface DriveData {
+interface DriveData {
   id?: string;
   shortId?: string;
-  songs: Song[];           // Max 3 songs
+  songs: Song[]; // maximum 3
   noteText: string;
-  voiceMemoUrl?: string;   // Supabase Storage URL
+  voiceMemoUrl?: string;
   createdAt?: string;
 }
+```
 
-## Key Requirements for Implementation
-Design & Tone Strictness:
+Persist an in-progress creator draft across refreshes, upload the optional audio blob before creating the share record, generate a short ID for `/drive/:shortId`, and clear the local draft only after successful creation.
 
-Use lowercase text for section headers on the receiver dashboard to maintain the lofi, pixel-art vibe.
+## Repository structure
 
-Stack the driving video directly on top of the dashboard interior graphic for a seamless "looking out the windshield" perspective.
+```text
+.
+├── README.md
+├── design/
+│   └── screenshots/    # Approved desktop and mobile page references
+└── public/
+    └── assets/         # Runtime font, image, and video assets
+```
 
-Maintain high scannability and explicit contrast on pixel buttons.
-
-Audio Handling:
-
-Limit recorded voice memos to a maximum of 2 minutes to optimize storage.
-
-Compress voice recordings to .webm or .mp3 before uploading to Supabase Storage.
-
-State Management:
-
-Persist creator drafts in sessionStorage so refreshing during creation does not lose the note or song selections.
-
-Reset store state after successful drive creation.
+When application code is added, update this section and add concrete setup, environment-variable, development, test, and deployment instructions based on the implementation that actually exists.
