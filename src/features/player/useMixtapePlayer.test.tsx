@@ -32,6 +32,7 @@ describe('mixtape preview player', () => {
   })
   afterEach(() => {
     cleanup()
+    vi.restoreAllMocks()
     vi.unstubAllGlobals()
   })
 
@@ -59,5 +60,16 @@ describe('mixtape preview player', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(PREVIEW_UNAVAILABLE_MESSAGE)
     expect(useDraftStore.getState().songs).toEqual([])
     expect(screen.getByText('one')).toBeInTheDocument()
+  })
+
+  it('plays a hardcoded preview without changing the creator player state', async () => {
+    const play = vi
+      .spyOn(HTMLMediaElement.prototype, 'play')
+      .mockImplementation(() => Promise.resolve())
+    render(<Player previewTrack={tracks[0]!} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Play track' }))
+    expect(play).toHaveBeenCalledOnce()
+    expect(useDraftStore.getState().player).toEqual(initialDraft.player)
+    expect(await screen.findByRole('button', { name: 'Pause track' })).toBeInTheDocument()
   })
 })

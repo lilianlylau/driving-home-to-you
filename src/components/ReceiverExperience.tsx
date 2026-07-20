@@ -2,17 +2,20 @@ import { ButtonLink } from './Button'
 import { Cassette } from './Cassette'
 import { Letter } from './Letter'
 import { Player } from './Player'
+import type { Song } from '../types/domain'
 
 export function ReceiverExperience({
   standalone = false,
   showIntro = false,
   cassetteTrackCount = 3,
   showClosingAction = true,
+  previewSong,
 }: {
   standalone?: boolean
   showIntro?: boolean
   cassetteTrackCount?: 1 | 2 | 3
   showClosingAction?: boolean
+  previewSong?: Song
 }) {
   return (
     <div className="receiver">
@@ -43,7 +46,7 @@ export function ReceiverExperience({
       <section className="receiver__section">
         <h2>pop the mixtape in.</h2>
         <p className="heading-3">songs they picked for the road.</p>
-        <Player />
+        <Player previewTrack={previewSong} />
         <Cassette trackCount={cassetteTrackCount} />
       </section>
       <section className="receiver__section">
