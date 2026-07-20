@@ -212,6 +212,10 @@ a {
   position: relative;
   margin-bottom: 14px;
 }
+.mixtape-playback-hint {
+  margin: 0 0 14px;
+  font-weight: normal;
+}
 .song-search__status {
   min-height: 17px;
   color: #555;
@@ -353,18 +357,35 @@ a {
 .player__controls {
   display: flex;
   justify-content: center;
-  height: 29px;
-  padding-top: 4px;
+  width: 177px;
+  height: 23px;
+  padding: 0;
+  margin: 4px auto 0;
+  background: url('/assets/mixtape/player-shell.png') center / 177px 23px no-repeat;
 }
 .player__controls button {
   width: 59px;
-  height: 22px;
-  border: 1px solid #080a0b;
-  border-radius: 2px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border: 0;
   padding: 0;
-  color: #8c9c96;
-  background: #1b2225;
+  background: transparent;
   cursor: pointer;
+}
+.player__controls button:hover:not(:disabled) {
+  background: rgb(255 255 255 / 5%);
+}
+.player__controls button:active:not(:disabled) {
+  background: rgb(0 0 0 / 12%);
+}
+.player__controls img {
+  width: auto;
+  max-width: 14px;
+  height: auto;
+  max-height: 16px;
+  image-rendering: pixelated;
+  pointer-events: none;
 }
 
 .cassette-wrap {
@@ -380,7 +401,7 @@ a {
 }
 .cassette-tracks {
   position: absolute;
-  top: 13.8%;
+  top: calc(13.8% + 4px);
   left: 8.2%;
   width: 82%;
   margin: 0;
@@ -395,6 +416,9 @@ a {
   height: 10px;
   padding-left: 1px;
   white-space: nowrap;
+}
+.cassette-tracks li:nth-child(3) {
+  transform: translateY(2px);
 }
 .landing .cassette-tracks li:first-child {
   transform: translateY(4px);

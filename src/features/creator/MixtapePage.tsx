@@ -19,6 +19,7 @@ export function MixtapePage() {
         <h1>step one. queue up the mixtape</h1>
         <p className="heading-3">pick up to three songs that reminds you of them</p>
         <SongSearch selected={songs} onAdd={addSong} />
+        <h3 className="mixtape-playback-hint">press next to play your songs in order</h3>
         <Player tracks={songs} />
         <Cassette editable tracks={songs} onRemove={removeSong} />
         <div className="actions">

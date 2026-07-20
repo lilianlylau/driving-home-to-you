@@ -62,7 +62,7 @@ function PlayerView({
             disabled={disabled}
             onClick={onPrevious}
           >
-            |◀
+            <img src="/assets/mixtape/back.png" alt="" />
           </button>
           <button
             type="button"
@@ -70,10 +70,13 @@ function PlayerView({
             disabled={disabled}
             onClick={onToggle}
           >
-            {isPlaying ? 'Ⅱ' : '▶'}
+            <img
+              src={isPlaying ? '/assets/mixtape/pause.png' : '/assets/mixtape/play.png'}
+              alt=""
+            />
           </button>
           <button type="button" aria-label="Next track" disabled={disabled} onClick={onNext}>
-            ▶|
+            <img src="/assets/mixtape/next.png" alt="" />
           </button>
         </div>
       </div>
