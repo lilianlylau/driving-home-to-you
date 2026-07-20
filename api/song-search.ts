@@ -1,5 +1,8 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { z } from 'zod'
+import { clientHash } from './_lib/security'
+import { getServerSupabase } from './_lib/supabase'
+import { takeRateLimit } from './_lib/rate-limit'
 
 const querySchema = z.string().trim().min(2).max(100)
 export const ITUNES_RESULT_LIMIT = 12
@@ -63,6 +66,24 @@ export default async function handler(request: IncomingMessage, response: Server
   if (!parsedQuery.success) {
     sendJson(response, 400, { code: 'invalid_query', message: 'enter 2 to 100 characters' })
     return
+  }
+
+  const secret = process.env.API_HASH_SECRET
+  if (secret && process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      await takeRateLimit(getServerSupabase(), 'client_search', clientHash(request, secret), 60, 30)
+    } catch (error) {
+      const retryAfter =
+        error instanceof Error && 'retryAfter' in error ? Number(error.retryAfter) : undefined
+      if (retryAfter) response.setHeader('Retry-After', String(retryAfter))
+      sendJson(response, retryAfter ? 429 : 503, {
+        code: retryAfter ? 'rate_limited' : 'rate_limit_unavailable',
+        message: retryAfter
+          ? 'too many searches, please try again later'
+          : 'song search is temporarily unavailable',
+      })
+      return
+    }
   }
 
   try {

@@ -2,7 +2,8 @@
 
 Driving Home to You is a lo-fi web experience for sending something personal to someone far away. A creator builds a digital passenger-seat package with up to three songs, a letter, and an optional voice memo, then shares a unique link. The recipient opens that link to enjoy the package against a sunny, retro road-trip backdrop.
 
-The repository contains the React/Vite foundation, the static visual system, approved visual references, and production assets. The creator interactions and backend persistence described below are staged for later implementation phases.
+The repository contains the React/Vite application, Vercel server APIs, Supabase persistence
+schema, approved visual references, and production assets.
 
 ## Experience overview
 
@@ -343,10 +344,30 @@ npm ci
 npm run dev
 ```
 
-Copy `.env.example` to `.env.local` only when connecting a Supabase project. The static app and CI checks run without secrets. `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are optional browser-safe values; never place a service-role key in a `VITE_` variable.
+Copy `.env.example` to `.env.local` when connecting a Supabase project. Apply migrations
+from `supabase/migrations/` to an isolated local or development project first.
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are optional browser-safe values. The
+server APIs require `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, a random secret of at
+least 32 characters in `API_HASH_SECRET`, and the canonical `PUBLIC_APP_URL`.
+`TURNSTILE_SECRET_KEY` is required once adaptive creation challenges are reached. Never
+place the service-role key or hash secret in a `VITE_` variable.
 
 Run `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run test:e2e`, and `npm run build` before handing off a change.
 
 ## Runtime and deployment decision
 
-Vercel server functions under `api/` are the selected server runtime for future song-search and drive APIs. Supabase Edge Functions will not duplicate those endpoints. The static foundation deploys with `npm run build` and the `dist` output directory; server environment variables will be documented when the APIs are introduced.
+Vercel server functions under `api/` are the selected runtime for song search and drive
+APIs. Supabase Edge Functions do not duplicate these endpoints. The existing iTunes proxy
+remains the song-search implementation and returns only the normalized `Song` shape.
+
+`POST /api/drives` accepts JSON for drives without a recording. For a recording it accepts
+`multipart/form-data` with a JSON `payload` field and a binary `voice` field. `GET
+/api/drives/:shortId` returns active public drive data with a five-minute signed voice URL;
+`DELETE /api/drives/:shortId` accepts `{ "deletionToken": "..." }`. All errors use
+`{ "code": "stable_code", "message": "safe message" }`.
+
+The migration creates an atomic `create_drive_with_songs` database function, private
+`voice-memos` storage, and shared rate-limit counters. RLS is enabled with no anonymous or
+authenticated policies; only server-side service-role calls can access private records.
+Recordings are limited to 5 MB and two minutes, and their container signature and duration
+are inspected server-side. Rate-limit rows contain keyed client hashes, never raw IPs.

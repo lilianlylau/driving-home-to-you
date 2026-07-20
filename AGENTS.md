@@ -132,17 +132,23 @@ refresh persistence, playback failure, and skip behavior.
 
 ### 6. Build persistence and server APIs
 
+- Keep the existing Vercel iTunes search proxy and its normalized `Song` response; add
+  shared privacy-conscious rate limiting without changing the client contract.
 - Add migrations for `drives` and `drive_songs`, all README constraints and indexes, RLS
   that denies anonymous direct access, and the private voice bucket.
 - Implement normalized JSON errors, short-ID generation, deletion-token hashing, signed
   voice URLs, and transactional drive/song creation with upload compensation.
 - Validate every payload server-side. Bound query lengths, strings, request bodies, MIME
-  types, audio duration, and file size.
-- Add rate limiting and adaptive bot protection to creation.
+  types, server-inspected audio duration, and file size. Do not trust browser-reported
+  recording metadata as authoritative.
+- Store rate-limit counters in Supabase rather than function-local memory. Apply global
+  and per-client creation limits and require a configured bot challenge after suspicious
+  volume; never persist raw IP addresses.
 
 Gate: integration tests prove that anonymous clients cannot list or mutate Supabase data,
 duplicates and invalid payloads fail, collisions retry, partial uploads are cleaned up,
-and private voice objects cannot be fetched without a valid signed URL.
+private voice objects cannot be fetched without a valid signed URL, and distributed rate
+limits behave consistently across server instances.
 
 ### 7. Connect publishing and recipient flows
 
