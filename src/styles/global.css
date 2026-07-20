@@ -93,7 +93,7 @@ a {
   color: inherit;
 }
 :focus-visible {
-  outline: 3px solid #b54148;
+  outline: 3px solid #65706d;
   outline-offset: 3px;
 }
 .sr-only {
@@ -419,9 +419,6 @@ a {
 }
 .cassette-tracks li:nth-child(3) {
   transform: translateY(2px);
-}
-.landing .cassette-tracks li:first-child {
-  transform: translateY(4px);
 }
 .cassette-tracks button {
   float: right;
