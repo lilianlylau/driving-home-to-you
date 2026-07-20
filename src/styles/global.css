@@ -93,8 +93,7 @@ a {
   color: inherit;
 }
 :focus-visible {
-  outline: 3px solid #65706d;
-  outline-offset: 3px;
+  outline: none;
 }
 .sr-only {
   position: absolute;
