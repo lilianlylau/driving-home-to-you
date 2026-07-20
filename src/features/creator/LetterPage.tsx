@@ -18,7 +18,11 @@ export function LetterPage() {
           <br /> long, short, or just a quick hello.
         </p>
         <Letter editable value={noteText} onChange={setNoteText} />
-        <output className="character-count" aria-live="polite">
+        <output
+          className="character-count"
+          aria-live="polite"
+          aria-label={`${noteText.length} of 500 characters used`}
+        >
           {noteText.length}/500
         </output>
         <div className="actions">

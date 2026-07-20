@@ -1,3 +1,5 @@
+import { expandedLetterHeight, needsExpandedLetter } from '../lib/letterLayout'
+
 export function Letter({
   editable = false,
   value = '',
@@ -7,8 +9,13 @@ export function Letter({
   value?: string
   onChange?: (value: string) => void
 }) {
+  const isExpanded = editable && needsExpandedLetter(value)
+
   return (
-    <div className="letter">
+    <div
+      className={`letter${isExpanded ? ' letter--expanded' : ''}`}
+      style={isExpanded ? { height: `${expandedLetterHeight(value)}px` } : undefined}
+    >
       <img src="/assets/letter/note-empty.png" alt="" />
       {editable ? (
         <textarea

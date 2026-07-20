@@ -467,6 +467,14 @@ a {
   color: #62686a;
   opacity: 1;
 }
+.creator-content .letter--expanded {
+  aspect-ratio: auto;
+}
+.letter--expanded textarea {
+  inset: 48px 10% 32px;
+  height: auto;
+  overflow: hidden;
+}
 
 .voice-recorder .player {
   margin-bottom: 25px;
@@ -500,6 +508,11 @@ a {
 .voice-recorder .actions {
   max-width: 260px;
   margin-inline: auto;
+}
+.voice-recorder__error {
+  margin: -20px auto 18px;
+  color: var(--red);
+  line-height: 1.1;
 }
 .voice-recorder .actions .button:last-child:nth-child(3) {
   flex-basis: 104px;
