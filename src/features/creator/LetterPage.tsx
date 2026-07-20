@@ -1,10 +1,13 @@
-import { ButtonLink } from '../../components/Button'
+import { Button } from '../../components/Button'
 import { CreatorHeader } from '../../components/CreatorHeader'
 import { Letter } from '../../components/Letter'
-import { useDraftStore } from '../../stores/draft'
+import { isValidNote, useDraftStore } from '../../stores/draft'
+import { useNavigate } from 'react-router-dom'
 
 export function LetterPage() {
   const { noteText, setNoteText } = useDraftStore()
+  const navigate = useNavigate()
+  const setCurrentStep = useDraftStore((state) => state.setCurrentStep)
   return (
     <main className="creator-page page">
       <CreatorHeader step={2} />
@@ -19,8 +22,23 @@ export function LetterPage() {
           {noteText.length}/500
         </output>
         <div className="actions">
-          <ButtonLink to="/create/mixtape">back</ButtonLink>
-          <ButtonLink to="/create/memo">next</ButtonLink>
+          <Button
+            onClick={() => {
+              setCurrentStep(1)
+              navigate('/create/mixtape')
+            }}
+          >
+            back
+          </Button>
+          <Button
+            disabled={!isValidNote(noteText)}
+            onClick={() => {
+              setCurrentStep(3)
+              navigate('/create/memo')
+            }}
+          >
+            next
+          </Button>
         </div>
       </section>
     </main>

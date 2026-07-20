@@ -1,7 +1,15 @@
 import { Button } from './Button'
 import { Player } from './Player'
 
-export function VoiceRecorder({ state = 'empty' }: { state?: 'empty' | 'recording' | 'recorded' }) {
+export function VoiceRecorder({
+  state = 'empty',
+  onBack,
+  onComplete,
+}: {
+  state?: 'empty' | 'recording' | 'recorded'
+  onBack?: () => void
+  onComplete?: () => void
+}) {
   const isEmpty = state === 'empty'
   return (
     <div className="voice-recorder">
@@ -28,7 +36,8 @@ export function VoiceRecorder({ state = 'empty' }: { state?: 'empty' | 'recordin
         {isEmpty && (
           <>
             <Button tone="red">record audio</Button>
-            <Button>skip</Button>
+            <Button onClick={onBack}>back</Button>
+            <Button onClick={onComplete}>skip</Button>
           </>
         )}
         {state === 'recording' && <Button tone="red">stop recording</Button>}
@@ -36,7 +45,7 @@ export function VoiceRecorder({ state = 'empty' }: { state?: 'empty' | 'recordin
           <>
             <Button>play back</Button>
             <Button tone="red">record again</Button>
-            <Button>done</Button>
+            <Button onClick={onComplete}>done</Button>
           </>
         )}
       </div>
